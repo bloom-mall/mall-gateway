@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: mall-gateway
+  cloud:
+    nacos:
+      config:
+        server-addr: nacos-service.infrastructure.svc.cluster.local
+        username: ${NACOS_USERNAME}
+        password: ${NACOS_PASSWORD}
+        namespace: ${NACOS_NAMESPACE}
+
+  config:
+    import:
+      - nacos:mall-gateway-config.yaml?group=BASE&refreshEnabled=true
+
+management:
+  endpoint:
+    health:
+      show-details: never
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
