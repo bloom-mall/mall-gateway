@@ -39,17 +39,22 @@ jobs:
             Dockerfile
 
 
-  manual-approval:
+  manual-trigger-push:
     runs-on: ubuntu-latest
-    needs: build
+    outputs:
+      CONTINUE_JOBS: ${{ steps.manual-trigger.outputs.CONTINUE_JOBS }}
     steps:
-      - name: Wait for approval
-        run: echo "Pending manual approval..."
+      - name: manual-trigger
+        id: manual-trigger
+        uses: ShuaiLLi/manual-trigger@v1.0.0
+        with:
+          RUN_NAME: "push"
 
 
-  deploy:
+  push:
     runs-on: ubuntu-latest
-    needs: manual-approval
+    needs: manual-trigger-push
+    if: ${{ needs.manual-trigger-push.outputs.CONTINUE_JOBS == 'true' }}
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
