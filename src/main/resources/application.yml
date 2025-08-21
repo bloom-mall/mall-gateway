@@ -3,15 +3,23 @@ spring:
     name: mall-gateway
   cloud:
     nacos:
+      server-addr: nacos-service.infrastructure.svc.cluster.local
+      username: ${NACOS_USERNAME}
+      password: ${NACOS_PASSWORD}
       config:
-        server-addr: nacos-service.infrastructure.svc.cluster.local
-        username: ${NACOS_USERNAME}
-        password: ${NACOS_PASSWORD}
+        enabled: true
         namespace: ${NACOS_NAMESPACE}
+        group: BASE
+        refresh-enabled: true
+      discovery:
+        enabled: true
+        register-enabled: false
+        namespace: ${NACOS_NAMESPACE}
+        group: BASE
 
   config:
     import:
-      - nacos:mall-gateway-config.yaml?group=BASE&refreshEnabled=true
+      - nacos:mall-gateway-config.yaml
 
 management:
   endpoint:
